@@ -1,0 +1,174 @@
+/* Custom CSS fixes for the LTR calculator */
+
+/* SVL Color Scheme */
+:root {
+  --svl-blue: #112e52; /* Darker blue color as requested */
+  --svl-dark-blue: #003d7a; /* Darker blue for hover states */
+  --svl-light-blue: #0056a3; /* Use the previous blue for table headers */
+  --svl-white: #ffffff; /* Clean white */
+  --svl-light-gray: #f5f5f5; /* Light background */
+  --svl-gray: #767676; /* Medium gray for text */
+  --svl-dark-gray: #333333; /* Dark gray for headings */
+  --svl-black: #000000; /* Black for text */
+}
+
+/* Print-specific styles to remove browser headers/footers */
+@media print {
+  @page {
+    margin: 0;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Hide browser default header/footer */
+  header, footer {
+    display: none !important;
+  }
+}
+
+/* Update Tailwind color classes to match SVL branding */
+.bg-blue { background-color: var(--svl-blue) !important; }
+.bg-orange { background-color: var(--svl-blue) !important; } /* Replace orange with SVL blue */
+.bg-silver { background-color: var(--svl-light-gray) !important; }
+.bg-metal { background-color: var(--svl-white) !important; }
+
+.text-orange { color: var(--svl-blue) !important; } /* Replace orange with SVL blue */
+.text-silver { color: var(--svl-white) !important; } /* White text on dark blue background */
+.text-metal { color: var(--svl-dark-gray) !important; }
+
+.border-metal { border-color: var(--svl-light-gray) !important; }
+.border-blue { border-color: var(--svl-blue) !important; }
+.border-orange { border-color: var(--svl-blue) !important; } /* Replace orange with SVL blue */
+
+/* Navigation bar styling with dark blue background */
+nav.bg-metal.px-0 {
+  background-color: var(--svl-blue) !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* Table header styling with SVL light blue background */
+thead tr:first-child th.bg-metal {
+  background-color: var(--svl-light-blue) !important;
+  color: var(--svl-white) !important;
+}
+
+/* Fix for text overlap in input fields */
+input[type="number"], input[type="text"] {
+    padding: 0.5rem;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+/* Ensure proper spacing for input groups */
+.input-group {
+    margin-bottom: 1rem;
+}
+
+/* Fix for any z-index issues */
+* {
+    z-index: auto;
+}
+
+/* Hide the original Victaulic SVG logo */
+nav svg[class*="h-12"] {
+    display: none !important;
+}
+
+/* Additional logo selectors for better coverage */
+.shrink-0.flex.items-center svg {
+    display: none !important;
+}
+
+/* Style the SVL logo */
+img[alt="SVL"] {
+    height: 3rem !important;
+    width: auto !important;
+    display: block !important;
+}
+
+/* Make sure the logo container has the right positioning */
+nav .block.absolute[class*="h-12"] {
+    z-index: 100 !important;
+}
+
+/* Ensure logo containers are properly positioned */
+nav .absolute[style*="z-index"] {
+    z-index: 100 !important;
+}
+
+/* Update button styles to match SVL branding */
+button, .button {
+    background-color: var(--svl-blue) !important;
+    border-color: var(--svl-blue) !important;
+    color: var(--svl-white) !important;
+}
+
+button:hover, .button:hover {
+    background-color: var(--svl-dark-blue) !important;
+    border-color: var(--svl-dark-blue) !important;
+}
+
+/* Update toggle switches to match SVL branding */
+/* Toggle switch background (inactive state) */
+input[type="checkbox"] + .relative.rounded-full {
+    background-color: var(--svl-light-gray) !important;
+}
+
+/* Toggle switch background (active state) */
+input[type="checkbox"]:checked + .relative.rounded-full {
+    background-color: var(--svl-blue) !important;
+}
+
+/* Toggle switch circle/thumb */
+.relative.rounded-full::after {
+    background-color: var(--svl-white) !important;
+}
+
+/* Toggle switch circle when checked */
+input[type="checkbox"]:checked + .relative.rounded-full::after {
+    background-color: var(--svl-white) !important;
+}
+
+/* Update navigation styles */
+.bg-metal {
+    background-color: var(--svl-white) !important;
+}
+
+/* Update footer styles */
+footer {
+    background-color: var(--svl-light-gray) !important;
+    color: var(--svl-gray) !important;
+}
+
+/* Additional utility styles for SVL branding consistency */
+.svl-primary-bg {
+    background-color: var(--svl-blue) !important;
+}
+
+.svl-primary-text {
+    color: var(--svl-blue) !important;
+}
+
+.svl-light-bg {
+    background-color: var(--svl-light-gray) !important;
+}
+
+.svl-white-text {
+    color: var(--svl-white) !important;
+}
+
+/* Ensure proper contrast for text on dark backgrounds */
+[style*="background-color: #112e52"] * {
+    color: var(--svl-white) !important;
+}
+
+/* Fix any text that might be invisible on dark backgrounds */
+nav[style*="background-color"] a,
+nav[style*="background-color"] span,
+nav[style*="background-color"] text {
+    color: var(--svl-white) !important;
+}
