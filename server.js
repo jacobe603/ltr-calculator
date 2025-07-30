@@ -80,19 +80,36 @@ const server = http.createServer((req, res) => {
   fs.readFile(filePath, (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
-        // File not found
-        const custom404Path = path.join(__dirname, '404.html');
-        fs.readFile(custom404Path, (err, content404) => {
-          if (err) {
-            // No 404 page, send default error
-            res.writeHead(404, { 'Content-Type': 'text/html', ...SECURITY_HEADERS });
-            res.end('<html><body><h1>404 Not Found</h1><p>The requested file was not found.</p></body></html>');
-          } else {
-            // Serve custom 404 page
-            res.writeHead(404, { 'Content-Type': 'text/html', ...SECURITY_HEADERS });
-            res.end(content404, 'utf-8');
-          }
-        });
+        // File not found - check if it's a SPA route
+        // If the path doesn't have a file extension, serve index.html for SPA routing
+        if (!extname && !requestedPath.includes('.')) {
+          const indexPath = path.join(__dirname, 'index.html');
+          fs.readFile(indexPath, (err, indexContent) => {
+            if (err) {
+              // If index.html doesn't exist, show 404
+              res.writeHead(404, { 'Content-Type': 'text/html', ...SECURITY_HEADERS });
+              res.end('<html><body><h1>404 Not Found</h1><p>The requested file was not found.</p></body></html>');
+            } else {
+              // Serve index.html for SPA routing
+              res.writeHead(200, { 'Content-Type': 'text/html', ...SECURITY_HEADERS });
+              res.end(indexContent, 'utf-8');
+            }
+          });
+        } else {
+          // File with extension not found - try to serve custom 404 page
+          const custom404Path = path.join(__dirname, '404.html');
+          fs.readFile(custom404Path, (err, content404) => {
+            if (err) {
+              // No 404 page, send default error
+              res.writeHead(404, { 'Content-Type': 'text/html', ...SECURITY_HEADERS });
+              res.end('<html><body><h1>404 Not Found</h1><p>The requested file was not found.</p></body></html>');
+            } else {
+              // Serve custom 404 page
+              res.writeHead(404, { 'Content-Type': 'text/html', ...SECURITY_HEADERS });
+              res.end(content404, 'utf-8');
+            }
+          });
+        }
       } else {
         // Server error
         res.writeHead(500, { 'Content-Type': 'text/plain', ...SECURITY_HEADERS });

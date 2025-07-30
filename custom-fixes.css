@@ -140,7 +140,7 @@ nav::before {
     display: block !important;
     width: 13.5rem !important;
     height: 9rem !important;
-    background-image: url('./build/assets/svl-logo.png') !important;
+    background-image: url('/build/assets/svl-logo.png') !important;
     background-size: contain !important;
     background-repeat: no-repeat !important;
     background-position: left center !important;
