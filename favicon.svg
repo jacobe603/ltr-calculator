@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
+  <defs>
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f89728;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e8851f;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a90c2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#112e52;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Orange swirls (left side) -->
+  <path d="M20 20 Q30 40 25 60 Q20 80 35 85 Q50 90 45 70 Q40 50 55 45 Q70 40 65 60 Q60 80 75 75" 
+        fill="none" stroke="url(#orangeGrad)" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Blue swirls (right side) -->
+  <path d="M80 20 Q70 40 75 60 Q80 80 65 85 Q50 90 55 70 Q60 50 45 45 Q30 40 35 60 Q40 80 25 75" 
+        fill="none" stroke="url(#blueGrad)" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Central swirl -->
+  <circle cx="50" cy="50" r="15" fill="url(#orangeGrad)" opacity="0.7"/>
+  <circle cx="50" cy="50" r="8" fill="url(#blueGrad)"/>
+</svg>
