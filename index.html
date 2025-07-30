@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title inertia>Victaulic Liquid to Rack Data Center Calculator</title>
+    <title inertia>SVL Liquid to Rack Data Center Calculator</title>
     <link rel="shortcut icon" href="./favicon.ico" />
 
 
@@ -47,91 +47,52 @@
     }
   }
   
-  // Replace Victaulic logo with SVL logo
-  function replaceLogo() {
+  // Logo is now handled purely with CSS - add click handler for svl.com redirect
+  function setupLogoClick() {
     try {
-      // Check if we've already added the logo to prevent duplicates
-      if (document.querySelector('img[alt="SVL"]')) {
-        return true;
-      }
-      
-      // Try multiple selectors to find the SVG logo
-      const selectors = [
-        'svg.block.absolute.h-12.top-5.left-8.w-auto.fill-current.text-gray-800',
-        '.block.absolute.h-12.top-5.left-8.w-auto.fill-current.text-gray-800 svg',
-        '.shrink-0.flex.items-center.my-4 svg'
-      ];
-      
-      for (const selector of selectors) {
-        const logoSVG = document.querySelector(selector);
-        if (logoSVG) {
-          try {
-            // Create a container div for the SVL logo
-            const logoContainer = document.createElement('div');
-            logoContainer.className = 'block absolute h-12 top-5 left-8 w-auto fill-current text-gray-800';
-            logoContainer.style.zIndex = '100';
-            
-            // Create the SVL logo image
-            const svlLogo = document.createElement('img');
-            svlLogo.src = './build/assets/svl-logo.png';
-            svlLogo.alt = 'SVL';
-            svlLogo.style.height = '3rem';
-            svlLogo.style.width = 'auto';
-            svlLogo.style.display = 'block';
-            
-            // Add error handling for image loading
-            svlLogo.onerror = function() {
-              debugWarn('SVL logo image failed to load, keeping original logo');
-              return false;
-            };
-            
-            // Add the logo to the container
-            logoContainer.appendChild(svlLogo);
-            
-            // Replace the SVG with our container
-            if (logoSVG.parentNode) {
-              logoSVG.parentNode.replaceChild(logoContainer, logoSVG);
-              return true;
-            }
-          } catch (error) {
-            debugWarn('Error replacing SVG logo:', error);
-            continue;
+      const nav = document.querySelector('nav');
+      if (nav) {
+        nav.addEventListener('click', function(event) {
+          // Check if click is in the logo area (left portion of nav)
+          const rect = nav.getBoundingClientRect();
+          const clickX = event.clientX - rect.left;
+          const clickY = event.clientY - rect.top;
+          
+          // Logo area is approximately left 2rem (32px) to 15.5rem (248px), centered vertically
+          if (clickX >= 32 && clickX <= 248 && clickY >= 10 && clickY <= rect.height - 10) {
+            event.preventDefault();
+            event.stopPropagation();
+            window.open('https://svl.com', '_blank', 'noopener,noreferrer');
           }
-        }
+        });
+        debugLog('SVL logo click handler set up successfully');
       }
-      
-      // If we can't find the SVG, try to add the logo to the parent container directly
-      const logoParent = document.querySelector('.shrink-0.flex.items-center.my-4');
-      if (logoParent && !logoParent.querySelector('img[alt="SVL"]')) {
-        try {
-          const svlLogo = document.createElement('img');
-          svlLogo.src = './build/assets/svl-logo.png';
-          svlLogo.alt = 'SVL';
-          svlLogo.style.height = '3rem';
-          svlLogo.style.width = 'auto';
-          svlLogo.style.display = 'block';
-          svlLogo.style.margin = '0.5rem 0';
-          
-          // Add error handling for image loading
-          svlLogo.onerror = function() {
-            debugWarn('SVL logo image failed to load');
-            return false;
-          };
-          
-          // Clear any existing SVG and add our logo
-          logoParent.innerHTML = '';
-          logoParent.appendChild(svlLogo);
-          
-          return true;
-        } catch (error) {
-          debugWarn('Error adding logo to parent container:', error);
-        }
-      }
-      
-      return false;
     } catch (error) {
-      debugError('Error in replaceLogo function:', error);
-      return false;
+      debugError('Error setting up logo click handler:', error);
+    }
+  }
+  
+  // Set up click handler for "Home" text to redirect to svl.com
+  function setupHomeClick() {
+    try {
+      // Add click listener to document to catch dynamically generated content
+      document.addEventListener('click', function(event) {
+        // Check if clicked element is a span with Home text
+        const target = event.target;
+        if (target.tagName === 'SPAN' && 
+            target.textContent.trim().toUpperCase() === 'HOME' &&
+            target.classList.contains('font-serif') &&
+            target.classList.contains('font-extrabold') &&
+            target.classList.contains('uppercase')) {
+          event.preventDefault();
+          event.stopPropagation();
+          window.open('https://svl.com', '_blank', 'noopener,noreferrer');
+          debugLog('Home link redirected to svl.com');
+        }
+      });
+      debugLog('Home click handler set up successfully');
+    } catch (error) {
+      debugError('Error setting up Home click handler:', error);
     }
   }
   
@@ -173,11 +134,12 @@
   // Apply all customizations
   function applyCustomizations() {
     try {
-      const logoReplaced = replaceLogo();
       const navStyled = styleNavigationBar();
       const textStyled = styleNavigationText();
+      setupLogoClick(); // Set up SVL logo click handler
+      setupHomeClick(); // Set up Home text click handler
       
-      if (logoReplaced || navStyled || textStyled) {
+      if (navStyled || textStyled) {
         customizationsApplied = true;
         return true;
       }

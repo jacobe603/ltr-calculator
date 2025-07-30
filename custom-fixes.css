@@ -5,6 +5,7 @@
   --svl-blue: #112e52; /* Darker blue color as requested */
   --svl-dark-blue: #003d7a; /* Darker blue for hover states */
   --svl-light-blue: #0056a3; /* Use the previous blue for table headers */
+  --svl-orange: #f89728; /* Orange for toggles and accents */
   --svl-white: #ffffff; /* Clean white */
   --svl-light-gray: #f5f5f5; /* Light background */
   --svl-gray: #767676; /* Medium gray for text */
@@ -15,7 +16,7 @@
 /* Print-specific styles to remove browser headers/footers */
 @media print {
   @page {
-    margin: 0;
+    margin: 0.5in;
   }
   
   body {
@@ -25,6 +26,56 @@
   
   /* Hide browser default header/footer */
   header, footer {
+    display: none !important;
+  }
+  
+  /* Scale down and reposition logo for print */
+  img[alt="SVL"] {
+    height: 1rem !important;
+    width: auto !important;
+    max-width: 2rem !important;
+  }
+  
+  /* Scale down navigation and header area */
+  nav {
+    padding: 0.1rem 0.25rem !important;
+    min-height: auto !important;
+    margin-top: 1rem !important;
+  }
+  
+  /* Add top margin to main content to avoid header overlap */
+  body {
+    margin: 0;
+    padding: 0;
+    padding-top: 1rem !important;
+  }
+  
+  /* Adjust main title sizing for print */
+  h1, .text-4xl, .text-3xl {
+    font-size: 1.5rem !important;
+    line-height: 1.2 !important;
+    margin: 0.5rem 0 !important;
+  }
+  
+  /* Make sure the main content fits better */
+  .container, .max-w-7xl {
+    max-width: 100% !important;
+    padding: 0.5rem !important;
+  }
+  
+  /* Reduce spacing in the header area */
+  .py-6 {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  
+  /* Ensure tables fit properly */
+  table {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Hide navigation elements that aren't needed in print */
+  .peer, input[type="checkbox"] + .relative.rounded-full {
     display: none !important;
   }
 }
@@ -73,7 +124,7 @@ input[type="number"], input[type="text"] {
     z-index: auto;
 }
 
-/* Hide the original Victaulic SVG logo */
+/* Hide the original SVG logo */
 nav svg[class*="h-12"] {
     display: none !important;
 }
@@ -83,16 +134,84 @@ nav svg[class*="h-12"] {
     display: none !important;
 }
 
+/* Add SVL logo directly with CSS - Position relative to nav element */
+nav::before {
+    content: '' !important;
+    display: block !important;
+    width: 13.5rem !important;
+    height: 9rem !important;
+    background-image: url('./build/assets/svl-logo.png') !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: left center !important;
+    position: absolute !important;
+    left: 2rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 1000 !important;
+    cursor: pointer !important;
+}
+
+/* Make SVL logo clickable and redirect to svl.com */
+nav::before:hover {
+    opacity: 0.8 !important;
+}
+
+/* Style and make "Home" text clickable */
+span.font-serif.font-extrabold.uppercase {
+    cursor: pointer !important;
+    transition: color 0.2s ease !important;
+}
+
+span.font-serif.font-extrabold.uppercase:hover {
+    color: var(--svl-orange) !important;
+    text-decoration: underline !important;
+}
+
+/* Force nav to allow absolute positioning and remove overflow constraints */
+nav {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+/* Hide the original logo container */
+nav .shrink-0.flex.items-center.my-4 {
+    visibility: hidden !important;
+}
+
 /* Style the SVL logo */
-img[alt="SVL"] {
+img[alt="SVL"], 
+.shrink-0.flex.items-center img[alt="SVL"],
+nav img[alt="SVL"] {
     height: 3rem !important;
     width: auto !important;
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 1000 !important;
+    position: relative !important;
 }
 
 /* Make sure the logo container has the right positioning */
 nav .block.absolute[class*="h-12"] {
     z-index: 100 !important;
+}
+
+/* Ensure SVL logo container is visible */
+.shrink-0.flex.items-center:has(img[alt="SVL"]) {
+    display: flex !important;
+    visibility: visible !important;
+}
+
+/* Force SVL logo and its containers to be visible */
+.shrink-0.flex.items-center {
+    display: flex !important;
+}
+
+/* Override any hiding rules for elements containing SVL logo */
+*:has(img[alt="SVL"]) {
+    display: block !important;
+    visibility: visible !important;
 }
 
 /* Ensure logo containers are properly positioned */
@@ -112,25 +231,95 @@ button:hover, .button:hover {
     border-color: var(--svl-dark-blue) !important;
 }
 
-/* Update toggle switches to match SVL branding */
-/* Toggle switch background (inactive state) */
+/* Update toggle switches for Imperial/Metric visibility */
+/* Imperial (unchecked): White background */
 input[type="checkbox"] + .relative.rounded-full {
-    background-color: var(--svl-light-gray) !important;
-}
-
-/* Toggle switch background (active state) */
-input[type="checkbox"]:checked + .relative.rounded-full {
-    background-color: var(--svl-blue) !important;
-}
-
-/* Toggle switch circle/thumb */
-.relative.rounded-full::after {
     background-color: var(--svl-white) !important;
+    border: 2px solid var(--svl-light-gray) !important;
+    position: relative !important;
+    width: 4.3rem !important;
+    height: 2.25rem !important;
 }
 
-/* Toggle switch circle when checked */
+/* Metric (checked): Orange background */
+input[type="checkbox"]:checked + .relative.rounded-full {
+    background-color: var(--svl-orange) !important;
+    border: 2px solid var(--svl-orange) !important;
+}
+
+/* Imperial circle: Orange circle on white background */
+.relative.rounded-full::after {
+    background-color: var(--svl-orange) !important;
+    border: 1px solid var(--svl-orange) !important;
+    top: 50% !important;
+    left: 2px !important;
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+    position: absolute !important;
+    border-radius: 50% !important;
+    transform: translateY(-50%) !important;
+    transition: transform 0.2s ease !important;
+}
+
+/* Metric circle: White circle on orange background */
 input[type="checkbox"]:checked + .relative.rounded-full::after {
     background-color: var(--svl-white) !important;
+    border: 1px solid var(--svl-white) !important;
+    transform: translateY(-50%) translateX(2rem) !important;
+}
+
+/* Specific styling for Imperial/Metric toggle for better visibility */
+/* Imperial state: White background, orange circle */
+.peer:not(:checked) ~ .relative.w-\[4\.3rem\],
+input[type="checkbox"]:not(:checked) + .relative.w-\[4\.3rem\] {
+    background-color: var(--svl-white) !important;
+    border: 2px solid var(--svl-light-gray) !important;
+}
+
+/* Metric state: Orange background, white circle */
+.peer:checked ~ .peer-checked\:bg-orange,
+.peer:checked ~ .relative.w-\[4\.3rem\],
+input[type="checkbox"]:checked + .relative.w-\[4\.3rem\] {
+    background-color: var(--svl-orange) !important;
+    border: 2px solid var(--svl-orange) !important;
+}
+
+/* Ensure the toggle is visible on dark backgrounds */
+nav input[type="checkbox"] + .relative.rounded-full,
+.bg-metal input[type="checkbox"] + .relative.rounded-full {
+    background-color: var(--svl-white) !important;
+    border: 2px solid var(--svl-light-gray) !important;
+}
+
+nav input[type="checkbox"]:checked + .relative.rounded-full,
+.bg-metal input[type="checkbox"]:checked + .relative.rounded-full {
+    background-color: var(--svl-orange) !important;
+    border: 2px solid var(--svl-orange) !important;
+}
+
+/* Circle colors and positioning for nav areas */
+nav .relative.rounded-full::after,
+.bg-metal .relative.rounded-full::after {
+    background-color: var(--svl-orange) !important;
+    top: 50% !important;
+    left: 2px !important;
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+    position: absolute !important;
+    border-radius: 50% !important;
+    transform: translateY(-50%) !important;
+    transition: transform 0.2s ease !important;
+}
+
+nav input[type="checkbox"]:checked + .relative.rounded-full::after,
+.bg-metal input[type="checkbox"]:checked + .relative.rounded-full::after {
+    background-color: var(--svl-white) !important;
+    transform: translateY(-50%) translateX(2rem) !important;
+}
+
+/* Make sure the toggle classes work */
+.peer-checked\:bg-orange {
+    background-color: var(--svl-orange) !important;
 }
 
 /* Update navigation styles */
